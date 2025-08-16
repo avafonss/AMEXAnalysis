@@ -223,7 +223,7 @@ def main():
         # App ID (hardcoded)
         st.subheader("App Store ID")
         st.info("📱 American Express Mobile App (Store ID: 362348516)")
-        teams_app_id = "362348516"  # Hardcoded
+        amex_app_id = "362348516"  # Hardcoded
         
         # Analysis settings
         st.subheader("Analysis Settings")
@@ -260,12 +260,12 @@ def main():
         progress_bar = st.progress(0)
         status_text = st.empty()
         
-        # Fetch Teams reviews
+        # Fetch AMEX reviews
         status_text.text("Fetching Recent American Express App reviews...")
         progress_bar.progress(50)
         
-        teams_reviews = fetch_app_store_reviews(teams_app_id, serpapi_key, max_reviews)
-        if not teams_reviews:
+        amex_reviews = fetch_app_store_reviews(amex_app_id, serpapi_key, max_reviews)
+        if not amex_reviews:
             st.error("Failed to fetch app reviews. Please check the app ID and API key.")
             return
         
@@ -275,7 +275,7 @@ def main():
         status_text.text("Analyzing reviews with OpenAI...")
         progress_bar.progress(90)
         
-        teams_analysis, teams_ratings = analyze_reviews_with_openai(teams_reviews, "American Express", openai_client)
+        amex_analysis, amex_ratings = analyze_reviews_with_openai(amex_reviews, "American Express", openai_client)
         
         progress_bar.progress(100)
         status_text.text("Analysis complete!")
@@ -283,22 +283,22 @@ def main():
         progress_bar.empty()
         status_text.empty()
         
-        if not teams_analysis:
+        if not amex_analysis:
             st.error("Failed to analyze reviews. Please check your OpenAI API key and try again.")
             return
         
         # Display results
-        st.success(f"✅ Analysis complete! Analyzed {len(teams_reviews)} American Express app reviews.")
+        st.success(f"✅ Analysis complete! Analyzed {len(amex_reviews)} American Express app reviews.")
         
         # Summary metrics
         col1, col2, col3 = st.columns(3)
         
         with col1:
-            st.metric("Total Reviews", len(teams_reviews))
+            st.metric("Total Reviews", len(amex_reviews))
         
         with col2:
-            teams_avg_rating = sum(teams_ratings) / len(teams_ratings) if teams_ratings else 0
-            st.metric("Average Rating", f"{teams_avg_rating:.1f} ⭐")
+            amex_avg_rating = sum(amex_ratings) / len(amex_ratings) if amex_ratings else 0
+            st.metric("Average Rating", f"{amex_avg_rating:.1f} ⭐")
         
         with col3:
             st.metric("Analysis Status", "Complete ✅")
@@ -306,7 +306,7 @@ def main():
         # Detailed analysis sections
         st.markdown("---")
         
-        # Teams Analysis
+        # amex Analysis
         with st.expander("📊 American Express - Detailed Analysis", expanded=True):
             col1, col2 = st.columns([2, 1])
             
@@ -314,75 +314,75 @@ def main():
                 st.subheader("Key Insights")
                 
                 # Display insights in a user-friendly format
-                if teams_analysis:
+                if amex_analysis:
                     # Overall sentiment
-                    sentiment = teams_analysis.get('overall_sentiment', 'neutral')
+                    sentiment = amex_analysis.get('overall_sentiment', 'neutral')
                     sentiment_emoji = "😊" if sentiment == "positive" else "😐" if sentiment == "neutral" else "😞"
                     st.metric("Overall Sentiment", f"{sentiment.title()} {sentiment_emoji}")
                     
                     # Sentiment score
-                    sentiment_score = teams_analysis.get('sentiment_score', 0.5)
+                    sentiment_score = amex_analysis.get('sentiment_score', 0.5)
                     st.metric("Sentiment Score", f"{sentiment_score:.2f}/1.0")
                     
                     # Key themes
                     st.subheader("🎯 Key Themes")
-                    themes = teams_analysis.get('key_themes', [])
+                    themes = amex_analysis.get('key_themes', [])
                     for theme in themes:
                         st.markdown(f"• **{theme}**")
                     
                     # Common issues
                     st.subheader("⚠️ Common Issues")
-                    issues = teams_analysis.get('common_issues', [])
+                    issues = amex_analysis.get('common_issues', [])
                     for issue in issues:
                         st.markdown(f"• **{issue}**")
                     
                     # Strengths
                     st.subheader("✅ Strengths")
-                    strengths = teams_analysis.get('strengths', [])
+                    strengths = amex_analysis.get('strengths', [])
                     for strength in strengths:
                         st.markdown(f"• **{strength}**")
                     
                     # User experience feedback
                     st.subheader("💬 User Experience Feedback")
-                    ux_feedback = teams_analysis.get('user_experience_feedback', 'No feedback available')
+                    ux_feedback = amex_analysis.get('user_experience_feedback', 'No feedback available')
                     st.info(ux_feedback)
                     
                     # Feature requests
                     st.subheader("🚀 Feature Requests")
-                    features = teams_analysis.get('feature_requests', [])
+                    features = amex_analysis.get('feature_requests', [])
                     for feature in features:
                         st.markdown(f"• **{feature}**")
             
             with col2:
-                if teams_ratings:
-                    fig = create_rating_chart(teams_ratings, "American Express")
+                if amex_ratings:
+                    fig = create_rating_chart(amex_ratings, "American Express")
                     if fig:
                         st.plotly_chart(fig, use_container_width=True)
         
-        # Teams Insights Section
+        # amex Insights Section
         st.markdown('<div class="comparison-section">', unsafe_allow_html=True)
         st.markdown("## 🔍 American Express App Analysis Insights")
         
         # Key themes and insights
-        if teams_analysis:
+        if amex_analysis:
             col1, col2 = st.columns(2)
             
             with col1:
                 st.subheader("Key Themes")
-                for theme in teams_analysis.get('key_themes', []):
+                for theme in amex_analysis.get('key_themes', []):
                     st.markdown(f"• {theme}")
             
             with col2:
                 st.subheader("Common Issues")
-                for issue in teams_analysis.get('common_issues', []):
+                for issue in amex_analysis.get('common_issues', []):
                     st.markdown(f"• {issue}")
         
         # Raw review data
         st.subheader("Raw Review Data")
-        teams_df = pd.DataFrame(teams_reviews)
-        if not teams_df.empty:
-            st.dataframe(teams_df, use_container_width=True)
-            st.info(f"📊 Showing all {len(teams_df)} reviews received from SerpAPI")
+        amex_df = pd.DataFrame(amex_reviews)
+        if not amex_df.empty:
+            st.dataframe(amex_df, use_container_width=True)
+            st.info(f"📊 Showing all {len(amex_df)} reviews received from SerpAPI")
         
         st.markdown('</div>', unsafe_allow_html=True)
         
@@ -390,12 +390,12 @@ def main():
         st.markdown("---")
         st.subheader("📥 Download Results")
         
-        if teams_analysis:
-            teams_json = json.dumps(teams_analysis, indent=2)
+        if amex_analysis:
+            amex_json = json.dumps(amex_analysis, indent=2)
             st.download_button(
                 label="Download American Express App Analysis (JSON)",
-                data=teams_json,
-                file_name=f"teams_analysis_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
+                data=amex_json,
+                file_name=f"amex_analysis_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
                 mime="application/json"
             )
 
