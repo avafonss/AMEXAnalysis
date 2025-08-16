@@ -16,7 +16,7 @@ load_dotenv()
 
 # Page configuration
 st.set_page_config(
-    page_title="Microsoft Teams Mobile Experience Insights",
+    page_title="AMEX Mobile Experience Insights",
     page_icon="📱",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -207,7 +207,7 @@ def create_rating_chart(ratings, app_name):
 
 def main():
     # Header
-    st.markdown('<h1 class="main-header">📱 Microsoft Teams Mobile Experience Insights</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">📱 AMEX Mobile Experience Insights</h1>', unsafe_allow_html=True)
     
     # Sidebar for configuration
     with st.sidebar:
@@ -222,8 +222,8 @@ def main():
         
         # App ID (hardcoded)
         st.subheader("App Store ID")
-        st.info("📱 Microsoft Teams (ID: 1113153706)")
-        teams_app_id = "1113153706"  # Hardcoded
+        st.info("📱 American Express Mobile App (Store ID: 362348516)")
+        teams_app_id = "362348516"  # Hardcoded
         
         # Analysis settings
         st.subheader("Analysis Settings")
@@ -235,7 +235,7 @@ def main():
         
         if st.button("ℹ️ About", use_container_width=True):
             st.info("""
-            This app analyzes Apple App Store reviews for Microsoft Teams using:
+            This app analyzes Apple App Store reviews for the American Express App using:
             - SerpAPI Apple Reviews API for fetching reviews
             - OpenAI GPT-4 for sentiment analysis and theme extraction
             - Built by Ava Fonss
@@ -261,12 +261,12 @@ def main():
         status_text = st.empty()
         
         # Fetch Teams reviews
-        status_text.text("Fetching Recent Microsoft Teams reviews...")
+        status_text.text("Fetching Recent American Express App reviews...")
         progress_bar.progress(50)
         
         teams_reviews = fetch_app_store_reviews(teams_app_id, serpapi_key, max_reviews)
         if not teams_reviews:
-            st.error("Failed to fetch Teams reviews. Please check the app ID and API key.")
+            st.error("Failed to fetch app reviews. Please check the app ID and API key.")
             return
         
         progress_bar.progress(75)
@@ -275,7 +275,7 @@ def main():
         status_text.text("Analyzing reviews with OpenAI...")
         progress_bar.progress(90)
         
-        teams_analysis, teams_ratings = analyze_reviews_with_openai(teams_reviews, "Microsoft Teams", openai_client)
+        teams_analysis, teams_ratings = analyze_reviews_with_openai(teams_reviews, "American Express", openai_client)
         
         progress_bar.progress(100)
         status_text.text("Analysis complete!")
@@ -288,7 +288,7 @@ def main():
             return
         
         # Display results
-        st.success(f"✅ Analysis complete! Analyzed {len(teams_reviews)} Microsoft Teams reviews.")
+        st.success(f"✅ Analysis complete! Analyzed {len(teams_reviews)} American Express app reviews.")
         
         # Summary metrics
         col1, col2, col3 = st.columns(3)
@@ -307,7 +307,7 @@ def main():
         st.markdown("---")
         
         # Teams Analysis
-        with st.expander("📊 Microsoft Teams - Detailed Analysis", expanded=True):
+        with st.expander("📊 American Express - Detailed Analysis", expanded=True):
             col1, col2 = st.columns([2, 1])
             
             with col1:
@@ -355,13 +355,13 @@ def main():
             
             with col2:
                 if teams_ratings:
-                    fig = create_rating_chart(teams_ratings, "Microsoft Teams")
+                    fig = create_rating_chart(teams_ratings, "American Express")
                     if fig:
                         st.plotly_chart(fig, use_container_width=True)
         
         # Teams Insights Section
         st.markdown('<div class="comparison-section">', unsafe_allow_html=True)
-        st.markdown("## 🔍 Microsoft Teams Analysis Insights")
+        st.markdown("## 🔍 American Express App Analysis Insights")
         
         # Key themes and insights
         if teams_analysis:
@@ -393,7 +393,7 @@ def main():
         if teams_analysis:
             teams_json = json.dumps(teams_analysis, indent=2)
             st.download_button(
-                label="Download Microsoft Teams Analysis (JSON)",
+                label="Download American Express App Analysis (JSON)",
                 data=teams_json,
                 file_name=f"teams_analysis_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
                 mime="application/json"

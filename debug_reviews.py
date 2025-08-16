@@ -18,9 +18,9 @@ def debug_review_fetching():
         print("❌ SERPAPI_KEY not found in environment variables")
         return
     
-    app_id = "1113153706"  # Microsoft Teams
+    app_id = "1113153706"  # American Express
     
-    print(f"🔍 Debugging review fetch for Microsoft Teams (ID: {app_id})")
+    print(f"🔍 Debugging review fetch for American Express (ID: {app_id})")
     print("=" * 60)
     
     try:
